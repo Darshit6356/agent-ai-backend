@@ -6,7 +6,7 @@ const { validationResult } = require("express-validator");
 
 const applyForJob = async (req, res) => {
   try {
-    const { jobId, coverLetter } = req.body;
+    const { jobId } = req.body;
 
     // Check if job exists and is active
     const job = await Job.findOne({ _id: jobId, isActive: true });
@@ -43,7 +43,6 @@ const applyForJob = async (req, res) => {
       candidateEmail: req.user.email,
       candidateName: req.user.name,
       resumeText: candidate?.resumeText || "",
-      coverLetter,
       matchScore,
     });
 
