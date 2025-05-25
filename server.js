@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
     credentials: true,
   })
 );
@@ -35,11 +35,7 @@ mongoose
   .connect(
     process.env.MONGODB_URI ||
       process.env.MONGO_URI ||
-      "mongodb://localhost:27017/jobportal",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
+      "mongodb://localhost:27017/jobportal"
   )
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
@@ -55,6 +51,8 @@ app.use("/api/applications", require("./routes/applicationRoutes"));
 
 console.log("Registering resume routes");
 app.use("/api/resume", require("./routes/resumeRoutes"));
+
+app.use("/api", require("./routes/emailRoutes"));
 
 // ✅ Health check
 app.get("/health", (req, res) => {
