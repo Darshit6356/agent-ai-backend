@@ -105,43 +105,44 @@ const matchCandidates = async (req, res) => {
         .status(400)
         .json({ error: "Job embedding is missing or invalid." });
     }
-
-    const applications = await Application.find({ jobId: job._id })
-    .populate({
-      path: 'candidateId',
-      select: 'name email embedding userId'  // Make sure embedding is selected
+    const applications = await Application.find({ jobId: job._id }).populate({
+      path: "candidateId",
+      select: "name email embedding userId", // Make sure embedding is selected
     });
 
-      const scores = applications
-        .map((app) => {
-          console.log(app);
-          const candidate = app.candidateId;
-          if (!candidate || !Array.isArray(candidate.embedding)) {
-            console.warn(`Skipping application ${app._id}: Invalid candidate or embedding.`);
-            return null;
-          }
+    const scores = applications
+      .map((app) => {
+        console.log(app);
+        const candidate = app.candidateId;
+        if (!candidate || !Array.isArray(candidate.embedding)) {
+          console.warn(
+            `Skipping application ${app._id}: Invalid candidate or embedding.`
+          );
+          return null;
+        }
 
-          const score = cosineSimilarity(candidate.embedding, job.embedding);
-          return {
-            applicationId: app._id,
-            candidateId: candidate._id,
-            userId: candidate.userId,
-            name: candidate.name,
-            email: candidate.email,
-            score: score,
-          };
-        })
-        .filter(Boolean); // remove null entries
+        const score = cosineSimilarity(candidate.embedding, job.embedding);
+        console.log(score);
+        return {
+          applicationId: app._id,
+          candidateId: candidate._id,
+          userId: candidate.userId,
+          name: candidate.name,
+          email: candidate.email,
+          score: score,
+        };
+      })
+      .filter(Boolean); // remove null entries
 
-      scores.sort((a, b) => b.score - a.score);
+    scores.sort((a, b) => b.score - a.score);
 
-      res.json({
-        job: {
-          title: job.title,
-          description: job.description,
-        },
-        matches: scores,
-      });
+    res.json({
+      job: {
+        title: job.title,
+        description: job.description,
+      },
+      matches: scores,
+    });
   } catch (error) {
     console.error("Match candidates error:", error);
     res.status(500).json({ error: "Failed to match candidates" });

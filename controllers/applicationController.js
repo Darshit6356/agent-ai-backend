@@ -15,11 +15,12 @@ const applyForJob = async (req, res) => {
         .status(404)
         .json({ error: "Job not found or no longer active" });
     }
+    const candidate_id = await Candidate.findOne({ userId: req.user._id });
 
     // Check if user already applied
     const existingApplication = await Application.findOne({
       jobId,
-      candidateId: req.user._id,
+      candidateId: candidate_id._id,
     });
 
     if (existingApplication) {
@@ -39,7 +40,7 @@ const applyForJob = async (req, res) => {
     // Create application
     const application = new Application({
       jobId,
-      candidateId: req.user._id,
+      candidateId: candidate_id._id,
       candidateEmail: req.user.email,
       candidateName: req.user.name,
       resumeText: candidate?.resumeText || "",
@@ -47,7 +48,7 @@ const applyForJob = async (req, res) => {
     });
 
     await application.save();
-
+    console.log(application);
     // Update job applications count
     await Job.findByIdAndUpdate(jobId, { $inc: { applicationsCount: 1 } });
 
