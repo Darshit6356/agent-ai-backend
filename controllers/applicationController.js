@@ -48,7 +48,7 @@ const applyForJob = async (req, res) => {
     });
 
     await application.save();
-    console.log(application);
+    // console.log(application);
     // Update job applications count
     await Job.findByIdAndUpdate(jobId, { $inc: { applicationsCount: 1 } });
 

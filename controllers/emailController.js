@@ -28,7 +28,7 @@ const sendEmail = async (req, res) => {
       text,
     });
 
-    console.log('Email sent:', info.messageId);
+    // console.log('Email sent:', info.messageId);
     res.status(200).json({ message: 'Email sent successfully', id: info.messageId });
   } catch (error) {
     console.error('Error sending email:', error);

@@ -40,16 +40,16 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
-console.log("Registering auth routes");
+// console.log("Registering auth routes");
 app.use("/api/auth", require("./routes/authRoutes"));
 
-console.log("Registering job routes");
+// console.log("Registering job routes");
 app.use("/api/jobs", require("./routes/jobRoutes"));
 
-console.log("Registering application routes");
+// console.log("Registering application routes");
 app.use("/api/applications", require("./routes/applicationRoutes"));
 
-console.log("Registering resume routes");
+// console.log("Registering resume routes");
 app.use("/api/resume", require("./routes/resumeRoutes"));
 
 app.use("/api", require("./routes/emailRoutes"));

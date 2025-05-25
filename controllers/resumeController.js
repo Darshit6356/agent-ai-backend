@@ -112,7 +112,7 @@ const matchCandidates = async (req, res) => {
 
     const scores = applications
       .map((app) => {
-        console.log(app);
+        // console.log(app);
         const candidate = app.candidateId;
         if (!candidate || !Array.isArray(candidate.embedding)) {
           console.warn(
@@ -122,7 +122,7 @@ const matchCandidates = async (req, res) => {
         }
 
         const score = cosineSimilarity(candidate.embedding, job.embedding);
-        console.log(score);
+        // console.log(score);
         return {
           applicationId: app._id,
           candidateId: candidate._id,
